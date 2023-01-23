@@ -30,6 +30,11 @@ public class CarsController {
     public List<Car> listAll() {
         return service.findAll();
     }
+
+    @GetMapping("/{id}")
+    public Car getCarById(@PathVariable Long id) {
+        return service.findById(id);
+    }
     @PostMapping
     public void create(@RequestBody CarDTO req) {
         service.save(req);
@@ -37,7 +42,7 @@ public class CarsController {
 
     @PutMapping("/{id}")
     public void putCar(@PathVariable Long id, @RequestBody CarDTO req) {
-        service.findById(id, req);
+        service.update(id, req);
     }
 
     @DeleteMapping("/{id}")
