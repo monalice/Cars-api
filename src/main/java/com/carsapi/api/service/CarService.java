@@ -23,11 +23,18 @@ public class CarService {
         return repository.findAll();
     }
 
+    public Car findById(Long id) {
+
+        return repository.findById(id)
+                .map(user -> user)
+                .orElse(null);
+    }
+
     public void save(CarDTO req) {
         repository.save(new Car(req));
     }
 
-    public void findById(Long id, CarDTO req) {
+    public void update(Long id, CarDTO req) {
         repository.findById(id).map(car -> {
             car.setModelo(req.modelo());
             car.setFabricante(req.fabricante());
