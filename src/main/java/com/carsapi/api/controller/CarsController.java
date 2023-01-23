@@ -3,6 +3,7 @@ package com.carsapi.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +33,13 @@ public class CarsController {
     }
 
     @GetMapping("/{id}")
-    public Car getCarById(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
+        var user = service.findById(id);
+        if(user != null) {
+            return ResponseEntity.ok().body(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
     @PostMapping
     public void create(@RequestBody CarDTO req) {
