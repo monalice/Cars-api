@@ -3,6 +3,11 @@ package com.carsapi.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carsapi.api.dto.CarDTO;
@@ -28,8 +34,8 @@ public class CarsController {
     //instancia o service
 
     @GetMapping
-    public List<Car> listAll() {
-        return service.findAll();
+    public Page<Car> listAll(@PageableDefault(page = 0, size = 5) Pageable page) {
+        return service.getCars(page);
     }
 
     @GetMapping("/{id}")
@@ -42,6 +48,7 @@ public class CarsController {
         }
     }
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     public void create(@RequestBody CarDTO req) {
         service.save(req);
     }
@@ -52,6 +59,7 @@ public class CarsController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteCar(@PathVariable Long id) {
         service.deleteById(id);
     }

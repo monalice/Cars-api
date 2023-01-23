@@ -3,6 +3,10 @@ package com.carsapi.api.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.carsapi.api.dto.CarDTO;
@@ -19,8 +23,17 @@ public class CarService {
     //instancia o repository
 
 
-    public List<Car> findAll() {
-        return repository.findAll();
+    public Page<Car> getCars(Pageable pageable) {
+        //return repository.findAll(page);
+
+        int page = Integer.parseInt(pageable.getPageParameter());
+        int size = Integer.parseInt(pageable.getSizeParameter());
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return new PageImpl<>(
+            repository.findAll(),
+            pageRequest, size
+        );
     }
 
     public Car findById(Long id) {
